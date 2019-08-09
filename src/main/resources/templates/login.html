@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">OpenCodeGame</a>
+    </div>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/registration">Registration</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div th:if="${param.error}">
+        <p class="text-danger">Wrong login or password</p>
+    </div>
+    <div th:if="${param.logout}">
+        <p class="text-success">Successful logged out</p>
+    </div>
+    <div th:if="${message} != null">
+        [[${message}]]
+    </div>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <input class="form-control" type="text" name="username" required placeholder="Login"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" required placeholder="Password"/>
+        </div>
+        <div class="form-group text-center">
+            <input class="btn btn-primary" type="submit" value="Sign in"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>
