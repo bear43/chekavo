@@ -18,6 +18,8 @@ async function onButtonShowNumberClick() {
     let answer = await sendPostReqRet("/giveup", null);
     if(answer.successful === true) {
         answerField[0].textContent = answer.number;
+        buttonSend.hide();
+        buttonField.hide();
     } else {
         answerField[0].textContent = "Exception: " + answer.exception;
     }
