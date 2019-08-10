@@ -28,6 +28,9 @@ public class Adventure
     @JsonBackReference
     private User user;
 
+    @Column
+    private boolean done;
+
     public Adventure(User user, List<Turn> turns, String number)
     {
         this.user = user;

@@ -1,9 +1,12 @@
 package controller;
 
+import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import service.inter.GameService;
+import service.inter.RatingService;
 import service.inter.UserService;
 
 import java.util.HashMap;
@@ -18,6 +21,9 @@ public class MainController
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private RatingService ratingService;
 
     @PostMapping("/newGame")
     @ResponseBody
@@ -77,5 +83,15 @@ public class MainController
     public String main()
     {
         return "main";
+    }
+
+    @GetMapping("/rating")
+    public String rating(Model model)
+    {
+        model.addAttribute("rate", ratingService.buildSortedRatingListByAvgScoreAndAdvCount(true));
+        User user = userService.getCurrentUser();
+        model.addAttribute("login", user.getLogin());
+        model.addAttribute("score", user.getScore());
+        return "rating";
     }
 }

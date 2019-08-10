@@ -4,6 +4,7 @@
 <head>
     <title>Main page</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bodymargin.css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/js/bootstrap.min.js"></script>
@@ -16,11 +17,12 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/">OpenCodeGame</a>
         </div>
-        <div class="collapse navbar-collapse">
+        <div class="navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" id="buttonNewGame" href="#">New game</a></li>
                 <li class="nav-item"><a class="nav-link" id="buttonHistory" href="#">History</a></li>
                 <li class="nav-item"><a class="nav-link" id="buttonShowNumber" href="#">Give up</a></li>
+                <li class="nav-item"><a class="nav-link" href="/rating">Rating</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item"><a href="/logout" class="nav-link">Sign out</a></li>
@@ -30,11 +32,11 @@
 <div class="container">
     <label class="text-info" id="msgLabel" th:text="${message != null} ? ${message} : ''"></label>
     <div id="fieldInfo">
-        <label class="text-info">Click new game at navbar to begin a game</label>
+        <label class="label label-default">Click new game at navbar to begin a game</label>
         <br/>
-        <label class="text-info">Click give up to show the magic number</label>
+        <label class="label label-default">Click give up to show the magic number</label>
         <br/>
-        <label class="text-info">Click history to see your states</label>
+        <label class="label label-default">Click history to see your states</label>
     </div>
     <div id="fieldHistory">
         <label class="text-info" id="labelTotalGames"></label>
@@ -45,9 +47,27 @@
         </div>
     </div>
     <div id="fieldGame">
-        <input type="number" id="fieldUsersPredict" placeholder="Your predict" min="0" max="9999"/>
+        <label class="label-default label">Your predict: </label>
+        <label id="fieldUsersPredict"></label>
         <button class="btn btn-primary" id="buttonSend">Send</button>
         <label id="fieldServerAnswer"></label>
+    </div>
+    <div id="fieldButton">
+        <button class="btn btn-dark numericButton">1</button>
+        <button class="btn btn-dark numericButton">2</button>
+        <button class="btn btn-dark numericButton">3</button>
+        <br/>
+        <button class="btn btn-dark numericButton">4</button>
+        <button class="btn btn-dark numericButton">5</button>
+        <button class="btn btn-dark numericButton">6</button>
+        <br/>
+        <button class="btn btn-dark numericButton">7</button>
+        <button class="btn btn-dark numericButton">8</button>
+        <button class="btn btn-dark numericButton">9</button>
+        <br/>
+        <button class="btn btn-dark numericButton">0</button>
+        <button class="btn btn-dark" id="backspaceButton">←</button>
+        <button class="btn btn-dark" id="backspaceClear">C</button>
     </div>
 </div>
 <script>
@@ -61,7 +81,13 @@
     adventuresField = $("#fieldAdventures");
     buttonShowNumber = $("#buttonShowNumber");
     labelTotalGames = $("#labelTotalGames");
+    buttonField = $("#fieldButton");
+    buttonNumeric = $(".numericButton");
     buttonBackFromTurns = $("#buttonBackFromTurns");
+    buttonBackspace = $("#backspaceButton");
+    $("#backspaceClear").on("click", function() { onButtonClearClick(); });
+    buttonBackspace.on("click", function () { onButtonBackspaceClick(); });
+    buttonNumeric.on("click", function (data) { onButtonNumericClick(data); });
     buttonBackFromTurns.on("click", function() { onButtonBackFromTurns(); });
     buttonShowNumber.on("click", async function() { await onButtonShowNumberClick(); });
     buttonSend.on("click", async function () { await onButtonSendClick(); });
@@ -69,6 +95,7 @@
     buttonBackFromTurns.hide();
     buttonShowNumber.hide();
     historyField.hide();
+    buttonField.hide();
     gameField.hide();
 </script>
 </body>

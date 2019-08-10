@@ -9,11 +9,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
-import service.inter.AdventureService;
-import service.inter.GameService;
-import service.inter.TurnService;
-import service.inter.UserService;
+import service.inter.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -31,6 +29,9 @@ public class GameServiceImpl implements GameService
 
     @Autowired
     private TurnService turnService;
+
+    @Autowired
+    private RatingService ratingService;
 
     private Adventure adventure;
 
@@ -172,6 +173,7 @@ public class GameServiceImpl implements GameService
     public void generateNumber()
     {
         byte[] divisions = new byte[4];
+        Arrays.fill(divisions, (byte)10);
         divisions[0] = generateSingleDivisionNumber(divisions);
         divisions[1] = generateSingleDivisionNumber(divisions);
         divisions[2] = generateSingleDivisionNumber(divisions);
@@ -262,9 +264,21 @@ public class GameServiceImpl implements GameService
         answer.put("equals", turn.isLastTurn());
         turnService.save(turn);
         if(turn.isLastTurn())
+        {
+            adventure.setDone(true);
+            adventureService.save(adventure);
+            User currentUser = userService.getCurrentUser();
+            if(currentUser.getScore() == 0)
+                currentUser.setScore(turnCount+1);
+            else
+                currentUser.setScore(
+                        ratingService.countAverageScore(currentUser.getId()));
             turnCount = 0;
+            userService.saveUser(currentUser);
+        }
         else
             turnCount++;
         return answer;
     }
+
 }

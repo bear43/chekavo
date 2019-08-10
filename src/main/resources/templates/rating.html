@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="ru">
+<head>
+    <title>Rating</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bodymargin.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">OpenCodeGame</a>
+    </div>
+    <div class="navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Main page</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item"><a href="/logout" class="nav-link">Sign out</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <label class="label label-success"th:text="'Your average score -> ' + ${login} + ': ' +  ${score}"></label>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-3">Login</th>
+            <th class="col-md-3">Average score</th>
+            <th class="col-md-3">Adventure count</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="set : ${rate}">
+                <td class="col-md-3" th:text="${set[0]}"></td>
+                <td class="col-md-3" th:text="${set[1]}"></td>
+                <td class="col-md-3" th:text="${set[2]}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+</script>
+</body>
+</html>

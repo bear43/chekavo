@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "usr")
 @Data
-public class User implements Serializable
+public class User
 {
     @Id
     @GeneratedValue
@@ -30,6 +30,9 @@ public class User implements Serializable
     @Column
     private int authority;
 
+    @Column
+    private int score;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Adventure> adventureList = new ArrayList<>();
@@ -38,22 +41,28 @@ public class User implements Serializable
     public User()
     {}
 
-    public User(String login, String password, boolean active, int authority)
+    public User(String login, String password, boolean active, int authority, int score)
     {
         this.login = login;
         this.password = password;
         this.active = active;
         this.authority = authority;
+        this.score = score;
+    }
+
+    public User(String login, String password, int score)
+    {
+        this(login, password, true, 0, score);
     }
 
     public User(String login, String password)
     {
-        this(login, password, true, 0);
+        this(login, password, 0);
     }
 
     @Override
     public String toString()
     {
-        return String.format("login: %s", login);
+        return String.format("login: %s | avg score: %d", login, score);
     }
 }
