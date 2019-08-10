@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
-//@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class GameServiceImpl implements GameService
 {
 
@@ -33,6 +33,8 @@ public class GameServiceImpl implements GameService
     private TurnService turnService;
 
     private Adventure adventure;
+
+    private int turnCount;
 
     private byte[] number = new byte[4];
 
@@ -175,6 +177,7 @@ public class GameServiceImpl implements GameService
         divisions[2] = generateSingleDivisionNumber(divisions);
         divisions[3] = generateSingleDivisionNumber(divisions);
         number = divisions;
+        turnCount = 0;
         adventure = new Adventure(compositeNumberString(number));
         adventure.setUser(userService.getCurrentUser());
         adventureService.save(adventure);
@@ -249,7 +252,7 @@ public class GameServiceImpl implements GameService
         Map<String, Object> answer = new HashMap<>();
         Turn turn = new Turn(
                 adventure,
-                adventure.getTurns().size() + 1,
+                turnCount + 1,
                 userNumber,
                 getBullCount(userNumber),
                 getCowCount(userNumber),
@@ -258,6 +261,10 @@ public class GameServiceImpl implements GameService
         answer.put("cows", turn.getCowCount());
         answer.put("equals", turn.isLastTurn());
         turnService.save(turn);
+        if(turn.isLastTurn())
+            turnCount = 0;
+        else
+            turnCount++;
         return answer;
     }
 }

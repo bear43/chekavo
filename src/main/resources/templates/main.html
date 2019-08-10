@@ -39,6 +39,7 @@
     <div id="fieldHistory">
         <label class="text-info" id="labelTotalGames"></label>
         <br/>
+        <button id="buttonBackFromTurns">Back</button>
         <div id="fieldAdventures">
 
         </div>
@@ -60,9 +61,12 @@
     adventuresField = $("#fieldAdventures");
     buttonShowNumber = $("#buttonShowNumber");
     labelTotalGames = $("#labelTotalGames");
+    buttonBackFromTurns = $("#buttonBackFromTurns");
+    buttonBackFromTurns.on("click", function() { onButtonBackFromTurns(); });
     buttonShowNumber.on("click", async function() { await onButtonShowNumberClick(); });
     buttonSend.on("click", async function () { await onButtonSendClick(); });
     buttonHistory.on("click", async function f() { await onButtonHistoryShow(); });
+    buttonBackFromTurns.hide();
     buttonShowNumber.hide();
     historyField.hide();
     gameField.hide();

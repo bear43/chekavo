@@ -8,6 +8,8 @@ let adventuresField;
 let buttonHistory;
 let labelTotalGames;
 let adventures;
+let oldContent;
+let buttonBackFromTurns;
 
 async function onButtonShowNumberClick() {
     let answer = await sendPostReqRet("/giveup", null);
@@ -47,18 +49,52 @@ async function onButtonNewGameClick() {
     historyField.hide();
 }
 
+function onButtonBackFromTurns() {
+    buttonBackFromTurns.hide();
+    labelTotalGames.show();
+    adventuresField[0].innerHTML = oldContent;
+    $(".ads").on("click", function(elem) { onAdsClick(elem) });
+}
+
+function onAdsClick(elem) {
+    labelTotalGames.hide();
+    infoField.hide();
+    oldContent = adventuresField[0].innerHTML;
+    let index = elem.currentTarget.firstChild.value;
+    let turns = adventures[index].turns;
+    adventuresField[0].innerHTML = "";
+    for(let i in turns) {
+        adventuresField[0].innerHTML +=
+            "<p class='text-dark'>#"  +
+            turns[i].turnNumber + " " +
+            turns[i].userNumber + " " +
+            turns[i].bullCount + "Б" +
+            turns[i].cowCount + "К";
+            if(turns[i].lastTurn === true) {
+                adventuresField[0].innerHTML += " (число угадано)";
+            }
+        //adventuresField[0].innerHTML += "</p>";
+    }
+    buttonBackFromTurns.show();
+    //adventuresField[0].innerHTML = "";
+}
+
 async function onButtonHistoryShow() {
     gameField.hide();
     historyField.show();
+    infoField.hide();
     adventures = await sendPostReqRet("/history", null);
     labelTotalGames[0].textContent = "Total adventures count: " + adventures.length;
     adventuresField[0].innerHTML = "";
     for (let i in adventures) {
         adventuresField[0].innerHTML +=
-            "<label class=\"text-primary\" class=\"ads\" id=" + adventures[i].id + ">"+
-            adventures[i].number + " | " + adventures[i].turns.length +
-            "</label>\n" +
-            "        <br/>";
-
+            "<div class = ads>" +
+                "<input type='hidden' value=\""+ i +"\">" +
+                "<label class=\"text-primary\">"+
+                adventures[i].number + " | " + adventures[i].turns.length +
+                "</label>\n" +
+                "        <br/>"+
+            "</div>";
     }
+    $(".ads").on("click", function(elem) { onAdsClick(elem); });
 }
